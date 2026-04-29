@@ -86,11 +86,12 @@ for-the-people/
 │   ├── models/               # SQLAlchemy ORM models ✅
 │   │   ├── user.py
 │   │   ├── issue.py
-│   │   ├── constituency.py
+│   │   ├── comment.py
 │   │   └── vote.py
 │   ├── schemas/              # Pydantic request/response schemas ✅
 │   │   ├── user.py
 │   │   ├── issue.py
+│   │   ├── comment.py
 │   │   └── vote.py
 │   ├── api/                  # Route handlers (in progress)
 │   │   ├── auth.py
