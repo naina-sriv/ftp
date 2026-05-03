@@ -3,8 +3,10 @@ from typing import Optional
 from datetime import datetime
 
 class UserBase(BaseModel):
-    name: str
+    first_name: str
+    last_name: Optional[str] = None
     email: EmailStr
+    constituency_id: int
 
 
 class UserCreate(UserBase):
@@ -22,3 +24,7 @@ class UserResponse(UserBase):
 
     class Config:
         from_attributes = True
+        
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str

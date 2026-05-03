@@ -27,6 +27,8 @@ class IssueResponse(IssueBase):
     status: str
     user_id: int
     created_at: datetime
+    threshold_reached: bool
+    vote_count: int
 
     class Config:
         from_attributes = True

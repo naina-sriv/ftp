@@ -4,7 +4,6 @@ from typing import Optional, Literal
 
 class VoteBase(BaseModel):
     issue_id: int
-    value: Literal[1, -1]
 
 class VoteCreate(VoteBase):
     pass

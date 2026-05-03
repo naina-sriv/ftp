@@ -51,7 +51,7 @@ The goal is simple — cut through noise and surface the issues that actually ma
 | Layer | Technology |
 |---|---|
 | API Framework | FastAPI |
-| Authentication | JWT (python-jose) |
+| Authentication | JWT (PyJWT) |
 | Database | PostgreSQL |
 | ORM / Validation | SQLAlchemy + Pydantic |
 | Async Task Queue | Celery |
@@ -82,45 +82,85 @@ REPORTED → VALIDATED → ESCALATED → RESOLVED
 ```
 for-the-people/
 ├── app/
-│   ├── main.py               # FastAPI app entry point
-│   ├── models/               # SQLAlchemy ORM models ✅
+│   ├── core/
+│   │   ├── config.py              # Environment variables + settings ✅
+│   │   ├── dependencies.py        # get_current_user dependency ✅
+│   │   └── security.py            # Password hashing + JWT ✅
+│   ├── models/                    # SQLAlchemy ORM models ✅
+│   │   ├── __init__.py
+│   │   ├── constituency.py
 │   │   ├── user.py
 │   │   ├── issue.py
 │   │   ├── comment.py
 │   │   └── vote.py
-│   ├── schemas/              # Pydantic request/response schemas ✅
+│   ├── routers/                   # Route handlers
+│   │   ├── __init__.py
+│   │   ├── auth.py                # Register + Login ✅
+│   │   ├── issue.py               # Issue CRUD 🚧
+│   │   ├── comments.py            # Comment routes 🚧
+│   │   └── votes.py               # Voting + threshold logic 🚧
+│   ├── schema/                    # Pydantic request/response schemas ✅
 │   │   ├── user.py
 │   │   ├── issue.py
 │   │   ├── comment.py
-│   │   └── vote.py
-│   ├── api/                  # Route handlers (in progress)
-│   │   ├── auth.py
-│   │   ├── issues.py
-│   │   └── votes.py
-│   ├── core/                 # Config, JWT, security
-│   ├── tasks/                # Celery task definitions
-│   └── db/                   # Database session, init
-├── docker-compose.yml
-├── Dockerfile
-├── requirements.txt
+│   │   ├── vote.py
+│   │   ├── constituency.py
+│   │   └── token.py
+│   ├── tasks/                     # Celery task definitions
+│   │   └── threshold.py           # Escalation trigger 🚧
+│   ├── __init__.py
+│   ├── db.py                      # Database session + Base ✅
+│   └── main.py                    # FastAPI app entry point ✅
+├── .env                           # Environment variables (not committed)
+├── .gitignore                     ✅
+├── docker-compose.yml             🚧
+├── Dockerfile                     🚧
+├── requirements.txt               ✅
 └── README.md
 ```
 
-> ✅ = implemented &nbsp;|&nbsp; remaining modules in active development
+> ✅ = implemented &nbsp;|&nbsp; 🚧 = in progress
 
 ---
 
-## Running Locally (once complete)
+## Environment Variables
+
+Create a `.env` file in the project root:
+
+```
+DATABASE_URL=postgresql://user:password@localhost/ftp
+SECRET_KEY=your_secret_key_here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+Generate a secure secret key:
+```bash
+openssl rand -hex 32
+```
+
+---
+
+## Running Locally
 
 ```bash
 # Clone the repo
 git clone https://github.com/naina-sriv/for-the-people.git
 cd for-the-people
 
-# Start all services
-docker-compose up --build
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
-# API will be available at
+# Install dependencies
+pip install -r requirements.txt
+
+# Add your .env file (see above)
+
+# Run the development server
+uvicorn app.main:app --reload
+
+# API available at
 http://localhost:8000
 
 # Interactive docs
@@ -129,16 +169,35 @@ http://localhost:8000/docs
 
 ---
 
-## API Endpoints (planned)
+## API Endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/auth/register` | Register a new user |
-| POST | `/auth/login` | Login, receive JWT |
-| GET | `/issues` | List issues in your constituency |
-| POST | `/issues` | Report a new issue |
-| POST | `/issues/{id}/vote` | Upvote an existing issue |
-| GET | `/issues/{id}` | Get issue detail + status |
+| Method | Endpoint | Description | Status |
+|---|---|---|---|
+| POST | `/auth/register` | Register a new user | ✅ |
+| POST | `/auth/login` | Login, receive JWT | ✅ |
+| GET | `/issues` | List issues in your constituency | 🚧 |
+| POST | `/issues` | Report a new issue | 🚧 |
+| GET | `/issues/{id}` | Get issue detail + status | 🚧 |
+| POST | `/issues/{id}/vote` | Vote on an issue | 🚧 |
+| POST | `/issues/{id}/comments` | Comment on an issue | 🚧 |
+| GET | `/issues/{id}/comments` | Get comments on an issue | 🚧 |
+
+---
+
+## Requirements
+
+```
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+pydantic-settings
+python-dotenv
+PyJWT
+passlib[bcrypt]
+celery
+redis
+```
 
 ---
 
@@ -150,4 +209,4 @@ I kept watching real problems in communities go unacknowledged — not because n
 
 ## Status
 
-> 🚧 Active development — schema and data models complete, API routes and async pipeline in progress.
+> 🚧 Active development — models, schemas, and auth complete. Issue, comment, and vote routes plus async Celery pipeline in progress.
