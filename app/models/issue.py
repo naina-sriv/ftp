@@ -21,3 +21,4 @@ class Issue(Base):
     
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     constituency_id = Column(Integer, ForeignKey("constituencies.id"), nullable=False)
+    
