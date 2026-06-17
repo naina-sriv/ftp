@@ -14,4 +14,4 @@ class VoteResponse(VoteBase):
     class Config:
         from_attributes = True
     
-    
+ 
