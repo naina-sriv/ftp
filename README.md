@@ -96,9 +96,9 @@ for-the-people/
 │   ├── routers/                   # Route handlers
 │   │   ├── __init__.py
 │   │   ├── auth.py                # Register + Login ✅
-│   │   ├── issue.py               # Issue CRUD 🚧
+│   │   ├── issue.py               # Issue CRUD ✅
 │   │   ├── comments.py            # Comment routes 🚧
-│   │   └── votes.py               # Voting + threshold logic 🚧
+│   │   └── votes.py               # Voting + threshold logic ✅
 │   ├── schema/                    # Pydantic request/response schemas ✅
 │   │   ├── user.py
 │   │   ├── issue.py
@@ -175,10 +175,10 @@ http://localhost:8000/docs
 |---|---|---|---|
 | POST | `/auth/register` | Register a new user | ✅ |
 | POST | `/auth/login` | Login, receive JWT | ✅ |
-| GET | `/issues` | List issues in your constituency | 🚧 |
-| POST | `/issues` | Report a new issue | 🚧 |
-| GET | `/issues/{id}` | Get issue detail + status | 🚧 |
-| POST | `/issues/{id}/vote` | Vote on an issue | 🚧 |
+| GET | `/issues` | List issues in your constituency | ✅ |
+| POST | `/issues` | Report a new issue | ✅ |
+| GET | `/issues/{id}` | Get issue detail + status | ✅ |
+| POST | `/issues/{id}/vote` | Vote on an issue | ✅ |
 | POST | `/issues/{id}/comments` | Comment on an issue | 🚧 |
 | GET | `/issues/{id}/comments` | Get comments on an issue | 🚧 |
 
